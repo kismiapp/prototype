@@ -1,6 +1,5 @@
 # prototype
-KISMI.APP Prototype
-Web: [http://130.61.235.35/](http://130.61.235.35/) 
+KISMI.APP Prototype [http://130.61.235.35/](http://130.61.235.35/) 
 
 
 # KISMI.APP & KISMI community
