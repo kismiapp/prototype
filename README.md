@@ -1,10 +1,10 @@
 # prototype
 KISMI.APP Prototype
+Web: [http://130.61.235.35/](http://130.61.235.35/) 
+
 
 # KISMI.APP & KISMI community
 ### Web2/Web3 Photo Voting App (Gamified real-time Photo Contests).
-
-Web: [http://130.61.235.35/](http://130.61.235.35/) 
 
 Linktree: [https://linktr.ee/kismi](https://linktr.ee/kismi)
 
