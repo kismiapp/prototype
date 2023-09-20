@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-P8E8D9WKB9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P8E8D9WKB9');
+  </script>
+  <title>KISMI.APP</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.min.js"></script>
+  <style>
+    /* Add some styles for the common elements */
+    body {
+      font-family: Arial, sans-serif;
+      color: #333333;
+      background-color: #f7f7f7;
+    }
+    a {
+      color: #1DA1F2;
+      text-decoration: none;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: bold;
+      text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+    }
+    span.verified {
+      background-color: #1DA1F2;
+      color: white;
+      font-size: 25px;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    /* Add styles for the photo grid */
+    #photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #f7f7f7;
+      padding: 40px;
+    }
+  
+    .photo {
+      width: 300px;
+      height: auto;
+      margin: 10px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+
+    .photo-info {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+
+
+    .photo-info h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .photo-info p {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .photo-info a {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .vote-count {
+      margin-bottom: 10px;
+    }
+
+
+
+    button[type='button'] {
+      display: block;
+      margin: 10px auto;
+      padding: 8px 16px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button[type='button']:hover {
+      background-color: #0070ba;
+    }
+    /* Center all text */
+    .center-text {
+      text-align: center;
+      margin: auto;
+      font-size: 25px;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      color: #333;
+      width: fit-content;
+    }
+
+    .contact-us {
+      margin-bottom: 0;
+    }
+    .social-links {
+      margin-top: 5px;
+    }
+
+
+
+    .slider-container {
+      width: 250px;
+      margin: 20px auto;
+    }
+
+    .slider {
+      width: 100%;
+      height: 15px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ddd;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #007bff;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #007bff;
+      cursor: pointer;
+    }
+
+
+  </style>
+</head>
+<body>
+  <br>
+  <div style="text-align: center;">
+    <div style="font-size: 30px; font-weight: bold;"><a href="https://kismi.app" style="font-size: 30px; font-weight: bold; color: #1DA1F2;">KISMI.APP</a> PROTOTYPE</div>
+    <h2 style="font-size: 25px; font-weight: bold; margin-top: 0;">WEB3 PHOTO VOTING APP</h2>
+    <p class="contact-us" style="font-size: 20px; font-weight: bold;">To participate in the contest, please contact us:</p>
+    <div class="social-links" style="display: inline-block;">
+      <a href="https://t.me/kismiapp" style="color: #1DA1F2; font-weight: bold; font-size: 20px;">Telegram</a>
+      <a href="https://twitter.com/kismiapp" style="color: #1DA1F2; font-weight: bold; font-size: 20px; margin-left: 10px;">Twitter</a>
+      <a href="https://www.instagram.com/kismiapp/" style="color: #1DA1F2; font-weight: bold; font-size: 20px; margin-left: 10px;">Instagram</a>
+      <a href="https://www.facebook.com/kismiapp" style="color: #1DA1F2; font-weight: bold; font-size: 20px; margin-left: 10px;">Facebook</a>
+      <a href="https://discord.com/invite/YXrRzqG3tC" style="color: #1DA1F2; font-weight: bold; font-size: 20px; margin-left: 10px;">Discord</a>
+    </div>
+  </div>
+    <br>
+    <div id="timer" style="text-align: center; margin-top: 20px; font-size: 25px; font-weight: bold; font-family: Arial, sans-serif;">
+      <span>ROUND TIMER: </span><span id="remaining-time">07:00:00:00</span>
+    </div>
+    <br>
+    <br>
+<!-- Add a search input field under the timer round row -->
+  <div style="text-align: center;">
+    <input type="text" id="search-input" placeholder="Search by title..." style="margin-top: 20px; font-size: 16px; padding: 4px 8px; width: 300px;">
+    <p class="contact-us" style="font-size: 20px; font-weight: bold; text-align: center;">Search</p>
+  </div>
+
+  <div class="slider-container">
+    <input type="range" min="0" max="100" value="50" class="slider">
+    <p class="contact-us" style="font-size: 20px; font-weight: bold; text-align: center;">Columns (x) multi-slider</p>
+  </div>
+
+
+  <!-- Your existing script for the timer here -->
+
+    <script>
+      var targetTime = new Date();
+      targetTime.setTime(targetTime.getTime() + (7 * 24 * 60 * 60 * 1000));
+
+      function updateTime() {
+        var currentTime = new Date();
+        var timeDiff = targetTime - currentTime;
+
+        if (timeDiff <= 0) {
+        clearInterval(timer);
+        document.getElementById("remaining-time").innerHTML = "Time's up!";
+        return;
+        }
+
+        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        if (days < 10) {
+        days = "0" + days;
+        }
+
+        if (hours < 10) {
+        hours = "0" + hours;
+        }
+
+        if (minutes < 10) {
+        minutes = "0" + minutes;
+        }
+
+        if (seconds < 10) {
+        seconds = "0" + seconds;
+        }
+
+        document.getElementById("remaining-time").innerHTML = days + ":" + hours + ":" + minutes + ":" + seconds;
+        document.querySelector("#timer span:first-child").textContent = "ROUND TIMER: ";
+      }
+
+      var timer = setInterval(updateTime, 1000);
+
+      
+    </script>
+  </div>
+</div>
+</div>
+  </div>
+  <!-- Display photos in a grid -->
+  <div id="photo-grid">
+    {% for photo in photos %}
+      <div class="photo" id="photo-{{ photo.id }}">
+        <img src="{{ photo.url }}" alt="{{ photo.title }}">
+        <div class="photo-info">
+          <h3>{{ photo.title }}</h3>
+          <!-- Add the link to the photo source here -->
+          <a href="{{ photo.url }}" target="_blank" style="color: #1DA1F2; font-weight: bold;">Link</a>
+          <p class="vote-count">{{ photo.votes }} 💋</p>
+          <button type="button" class="upvote-button" data-id="{{ photo.id}}">KISS</button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+  <script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    if(socket)console.log('socket connected');
+    else console.log('socket not connected');
+    // Handle upvote button click
+    $(document).on('click', '.upvote-button', function() {
+      // Get the ID of the photo to upvote
+      var photoId = $(this).data('id');
+      let photoVotes=document.querySelector(`#photo-${photoId}`).querySelector('.vote-count').textContent.split(' ')[0]; ;
+      // console.log(photoVotes)
+      // console.log(photoId+" voted");
+      // Send a vote_update event to the server
+      socket.emit('vote_update', { id: photoId, votes: photoVotes });
+    });
+    let photoVotes=0;
+    // Handle load_photos event
+    socket.on('load_photos', function(photos) {
+      // Sort photos by the number of votes they have received
+      var sortedPhotos = photos.sort(function(a, b) {
+        return b.votes - a.votes;
+      });
+      // Clear the existing photos from the photo grid
+      $('#photo-grid').empty();
+    
+
+      // Add the sorted photos to the photo grid
+      for (var i = 0; i < sortedPhotos.length; i++) {
+        var photo = sortedPhotos[i];
+        var photoHtml = '<div class="photo" id="photo-' + photo.id + '">' +
+          '<img src="' + photo.url + '" alt="' + photo.title + '">' +
+          '<div class="photo-info">' +
+            '<h3>' + photo.title + '</h3>' +
+            '<p><a href="' + photo.url + '" target="_blank" style="color: #1DA1F2; font-weight: bold;">Link</a></p>' +
+            '<p class="vote-count">' + photo.votes + ' 💋</p>' +
+            '<button type="button" class="upvote-button" data-id="' + photo.id + '">KISS</button>' +
+          '</div>' +
+        '</div>';
+        $('#photo-grid').append(photoHtml);
+      }
+    });
+
+    // Handle vote_update event
+    socket.on('update_vote', function(photoData) {
+      var photoId = photoData.id;
+      var photoVotes = photoData.votes;
+      var voteCountElem = $('#photo-' + photoId + ' .vote-count');
+      voteCountElem.text(photoVotes + ' 💋');
+      socket.emit('update_photo')
+    });
+
+    // Add the search functionality
+    $(document).ready(function () {
+      $('#search-input').on('input', function () {
+        var searchValue = $(this).val().toLowerCase();
+        $('.photo').each(function () {
+          var photoTitle = $(this).find('h3').text().toLowerCase();
+          if (photoTitle.indexOf(searchValue) > -1) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
