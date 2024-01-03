@@ -204,12 +204,12 @@
   <!-- Your existing script for the timer here -->
 
     <script>
-      var targetTime = new Date();
+      let targetTime = new Date();
       targetTime.setTime(targetTime.getTime() + (7 * 24 * 60 * 60 * 1000));
 
       function updateTime() {
-        var currentTime = new Date();
-        var timeDiff = targetTime - currentTime;
+        let currentTime = new Date();
+        let timeDiff = targetTime - currentTime;
 
         if (timeDiff <= 0) {
         clearInterval(timer);
@@ -217,10 +217,10 @@
         return;
         }
 
-        var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+        let days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
 
         if (days < 10) {
         days = "0" + days;
@@ -242,7 +242,7 @@
         document.querySelector("#timer span:first-child").textContent = "ROUND TIMER: ";
       }
 
-      var timer = setInterval(updateTime, 1000);
+      let timer = setInterval(updateTime, 1000);
 
       
     </script>
@@ -268,13 +268,13 @@
 
 
   <script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    let socket = io.connect('http://' + document.domain + ':' + location.port);
     if(socket)console.log('socket connected');
     else console.log('socket not connected');
     // Handle upvote button click
     $(document).on('click', '.upvote-button', function() {
       // Get the ID of the photo to upvote
-      var photoId = $(this).data('id');
+      let photoId = $(this).data('id');
       let photoVotes=document.querySelector(`#photo-${photoId}`).querySelector('.vote-count').textContent.split(' ')[0]; ;
       // console.log(photoVotes)
       // console.log(photoId+" voted");
@@ -285,7 +285,7 @@
     // Handle load_photos event
     socket.on('load_photos', function(photos) {
       // Sort photos by the number of votes they have received
-      var sortedPhotos = photos.sort(function(a, b) {
+      let sortedPhotos = photos.sort(function(a, b) {
         return b.votes - a.votes;
       });
       // Clear the existing photos from the photo grid
@@ -293,9 +293,9 @@
     
 
       // Add the sorted photos to the photo grid
-      for (var i = 0; i < sortedPhotos.length; i++) {
-        var photo = sortedPhotos[i];
-        var photoHtml = '<div class="photo" id="photo-' + photo.id + '">' +
+      for (let i = 0; i < sortedPhotos.length; i++) {
+        let photo = sortedPhotos[i];
+        let photoHtml = '<div class="photo" id="photo-' + photo.id + '">' +
           '<img src="' + photo.url + '" alt="' + photo.title + '">' +
           '<div class="photo-info">' +
             '<h3>' + photo.title + '</h3>' +
@@ -310,9 +310,9 @@
 
     // Handle vote_update event
     socket.on('update_vote', function(photoData) {
-      var photoId = photoData.id;
-      var photoVotes = photoData.votes;
-      var voteCountElem = $('#photo-' + photoId + ' .vote-count');
+      let photoId = photoData.id;
+      let photoVotes = photoData.votes;
+      let voteCountElem = $('#photo-' + photoId + ' .vote-count');
       voteCountElem.text(photoVotes + ' 💋');
       socket.emit('update_photo')
     });
@@ -320,9 +320,9 @@
     // Add the search functionality
     $(document).ready(function () {
       $('#search-input').on('input', function () {
-        var searchValue = $(this).val().toLowerCase();
+        let searchValue = $(this).val().toLowerCase();
         $('.photo').each(function () {
-          var photoTitle = $(this).find('h3').text().toLowerCase();
+          let photoTitle = $(this).find('h3').text().toLowerCase();
           if (photoTitle.indexOf(searchValue) > -1) {
             $(this).show();
           } else {
